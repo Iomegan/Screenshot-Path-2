@@ -1,0 +1,14 @@
+{
+  "pins" : [
+    {
+      "identity" : "about-view",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Iomegan/About-View",
+      "state" : {
+        "branch" : "main",
+        "revision" : "46f76ae3aa1dfc038adbac9d2efdfbc293bb1e8f"
+      }
+    }
+  ],
+  "version" : 2
+}
