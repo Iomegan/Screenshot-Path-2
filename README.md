@@ -1,9 +1,9 @@
-# Screenshto Path
+# Screenshot Path
 
 By default macOS saves screenshots to the user’s desktop. This is handy for the occasional screenshot but those looking to take dozens or hundreds of screenshots will want to use Screenshot Path to set up a custom destination and avoid cluttering up the desktop.
 
 
-Screenshot Path has been designed by Daniel Witt [witt-software.com](witt-software.com)
+Screenshot Path has been designed by Daniel Witt [witt-software.com](https://witt-software.com)
 
 ## License
 
