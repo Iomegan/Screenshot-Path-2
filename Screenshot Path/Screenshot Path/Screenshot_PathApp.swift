@@ -13,21 +13,18 @@ import TipKit
 struct Screenshot_PathApp: App {
     let aboutViewModel = AboutViewModel(productPageURL: URL(string: "https://www.witt-software.com/screenshotpath")!, appIconCreator: nil, appIconCreatorURL: nil, appStoreID: nil, showAppStoreRateButton: false)
 
-    
     init() {
-        if #available(macOS 14.0, *) {
-            try? Tips.configure()
-        }
+        try? Tips.configure()
     }
 
-    
     var body: some Scene {
         Window("Screenshot Path", id: "main-window") {
             VStack(spacing: 0) {
                 Text(verbatim: "Screenshot Path")
                     .font(.title2.bold())
-//
+                //
                 ContentView()
+                
             }
             .fixedSize()
             .background(Color.specialWindowBackground)
@@ -37,10 +34,11 @@ struct Screenshot_PathApp: App {
         .windowStyle(.hiddenTitleBar)
         .commands {
             CommandGroup(replacing: CommandGroupPlacement.appInfo) {
-                Button("About \(Bundle.main.appName)") {
+                Button("About \(Bundle.main.appName)", systemImage: "info.circle") {
                     aboutViewModel.showAboutWindow()
                 }
             }
         }
+        .windowBackgroundDragBehavior(.enabled) // not working because of form
     }
 }

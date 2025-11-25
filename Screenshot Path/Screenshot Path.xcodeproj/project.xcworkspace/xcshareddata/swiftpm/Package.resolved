@@ -1,4 +1,5 @@
 {
+  "originHash" : "f078b030f325eb48f6a4666a94259890b09f5e2a04feeedf480630ed227efb1f",
   "pins" : [
     {
       "identity" : "about-view",
@@ -6,9 +7,9 @@
       "location" : "https://github.com/Iomegan/About-View",
       "state" : {
         "branch" : "main",
-        "revision" : "46f76ae3aa1dfc038adbac9d2efdfbc293bb1e8f"
+        "revision" : "7cf7fed9582ed8052a3f7396f4146c9591d84518"
       }
     }
   ],
-  "version" : 2
+  "version" : 3
 }

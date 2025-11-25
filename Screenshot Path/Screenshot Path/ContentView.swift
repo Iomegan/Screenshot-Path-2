@@ -20,112 +20,93 @@ struct ScreenshotFolderTip: Tip {
     }
 }
 
-// @available(macOS 14.0, *)
-// struct MyTipViewStyle: TipViewStyle {
-//    func makeBody(configuration: Configuration) -> some View {
-//        VStack(alignment: .leading) {
-//            HStack(alignment: .top) {
-//                HStack {
-//                    configuration.image
-//                    configuration.title
-//                        .multilineTextAlignment(.leading)
-//                }
-//                .font(.headline)
-//
-//                Spacer()
-//                Button(action: {
-//                    configuration.tip.invalidate(reason: .tipClosed)
-//                }, label: {
-//                    Image(systemName: "xmark")
-//                })
-//                .mask(Circle())
-//            }
-//
-//            configuration.message?
-//                .font(.body)
-//                .foregroundStyle(.secondary)
-//                .multilineTextAlignment(.leading)
-//
-//                .frame(maxWidth: 300, maxHeight: .infinity)
-//
-//
-//
-//        }
-//        .padding()
-//        .fixedSize()
-//
-//    }
-// }
 struct ContentView: View {
     let avaialbleFileTypies = [UTType.png, .jpeg, .bmp, .heic, .gif, .pdf, .tiff]
 
     @ObservedObject private var screenshotSettings = ScreenshotSettings()
 
     var body: some View {
-        Form {
-            Section {
-                Button {
-                    chooseScreenshotPath()
-                } label: {
-                    FilePathView(url: self.$screenshotSettings.pathURL)
-                }
-                .buttonStyle(.plain)
-            }
-            header: {
-                Text("Path")
-            }
-            footer: {
-                HStack {
-                    Spacer()
-
-                    Button("Reveal in Finder") {
-                        NSWorkspace.shared.selectFile(nil, inFileViewerRootedAtPath: screenshotSettings.pathURL.path(percentEncoded: false))
-                    }
-
-                    Button("Select Folder") {
+        ZStack()  {
+            Form {
+                Section {
+                    Button {
                         chooseScreenshotPath()
+                    } label: {
+                        FilePathView(url: self.$screenshotSettings.pathURL)
                     }
+                    .buttonStyle(.plain)
+                }
+                header: {
+                    Text("Path")
 
-                    if #available(iOS 17, macOS 14, *) {
-                        Button("Create Screenshot Folder") {
-                            addApplicationToDock()
+                }
+                footer: {
+                    HStack {
+                        Spacer()
+
+                        if #available(macOS 26.0, *) {
+                            Button("Reveal in Finder") {
+                                NSWorkspace.shared.selectFile(nil, inFileViewerRootedAtPath: screenshotSettings.pathURL.path(percentEncoded: false))
+                            }
+                            .buttonStyle(.glass)
                         }
-                        .help("This action creates a new folder named Screenshots in your home directory. It also adds the folder to the Dock for convenient access to your screenshots.")
-                        .popoverTip(ScreenshotFolderTip(), arrowEdge: .trailing)
-//                        .tipViewStyle(MyTipViewStyle())
-                    }
-                    else {
-                        Button("Create Screenshot Folder") {
-                            addApplicationToDock()
+                        else {
+                            Button("Reveal in Finder") {
+                                NSWorkspace.shared.selectFile(nil, inFileViewerRootedAtPath: screenshotSettings.pathURL.path(percentEncoded: false))
+                            }
                         }
-                        .help("This action creates a new folder named Screenshots in your home directory. It also adds the folder to the Dock for convenient access to your screenshots.")
+                        if #available(macOS 26.0, *) {
+                            Button("Select Folder") {
+                                chooseScreenshotPath()
+                            }
+                            .buttonStyle(.glass)
+                        }
+                        else {
+                            Button("Select Folder") {
+                                chooseScreenshotPath()
+                            }
+                        }
+
+                        if #available(macOS 14, *) {
+                            Button("Create Screenshot Folder") {
+                                addApplicationToDock()
+                            }
+                            .help("This action creates a new folder named Screenshots in your home directory. It also adds the folder to the Dock for convenient access to your screenshots.")
+                            .popoverTip(ScreenshotFolderTip(), arrowEdge: .trailing)
+                        }
+                        else {
+                            Button("Create Screenshot Folder") {
+                                addApplicationToDock()
+                            }
+                            .help("This action creates a new folder named Screenshots in your home directory. It also adds the folder to the Dock for convenient access to your screenshots.")
+                        }
+                    }
+                    .buttonStyle(.bordered)
+                }
+                Section("Settings") {
+                    Picker("File Type", selection: self.$screenshotSettings.fileType) {
+                        ForEach(self.avaialbleFileTypies) { type in
+                            Text(type.localizedDescription ?? "Untitled").tag(type)
+                        }
+                    }
+                    Toggle("Add Shadow to Image", isOn: self.$screenshotSettings.shaddow)
+                    Toggle("Use Timestamp in File Name", isOn: self.$screenshotSettings.timeStamp)
+                    Toggle("Use Custom Name", isOn: self.$screenshotSettings.useDefaultName)
+                    if self.screenshotSettings.useDefaultName {
+                        TextField("Name", text: self.$screenshotSettings.name)
+                            .textFieldStyle(.squareBorder)
                     }
                 }
-                .buttonStyle(.bordered)
+                .tint(.accentColor)
             }
-            Section("Settings") {
-                Picker("File Type", selection: self.$screenshotSettings.fileType) {
-                    ForEach(self.avaialbleFileTypies) { type in
-                        Text(type.localizedDescription ?? "Untitled").tag(type)
-                    }
-                }
-                Toggle("Add Shadow to Image", isOn: self.$screenshotSettings.shaddow)
-                Toggle("Use Timestamp in File Name", isOn: self.$screenshotSettings.timeStamp)
-                Toggle("Use Custom Name", isOn: self.$screenshotSettings.useDefaultName)
-                if self.screenshotSettings.useDefaultName {
-                    TextField("Name", text: self.$screenshotSettings.name)
-                        .textFieldStyle(.squareBorder)
-                }
+            .scrollDisabled(true)
+            .formStyle(.grouped)
+            .scrollContentBackground(.hidden)
+            .onAppear { screenshotSettings.readUserDefaults() }
+            .onChange(of: screenshotSettings.description) { _, newValue in
+                NSLog("New screenshot settings: \(newValue)")
+                screenshotSettings.setUpdatedUserDefaults()
             }
-            .tint(.accentColor)
-        }
-        .scrollDisabled(true)
-        .formStyle(.grouped)
-        .scrollContentBackground(.hidden)
-        .onAppear { screenshotSettings.readUserDefaults() }
-        .onChange(of: screenshotSettings.description) { newValue in
-            NSLog("New screenshot settings: \(newValue)")
-            screenshotSettings.setUpdatedUserDefaults()
         }
     }
 
@@ -171,7 +152,12 @@ struct ContentView: View {
             print("error: \(error)")
         }
 
-        NSWorkspace.shared.setIcon(NSImage(named: "BigSur_Icon"), forFile: url.path(percentEncoded: false))
+        if #available(macOS 26.0, *) {
+            NSWorkspace.shared.setIcon(NSImage(named: "Tahoe_Icon"), forFile: url.path(percentEncoded: false))
+        }
+        else {
+            NSWorkspace.shared.setIcon(NSImage(named: "BigSur_Icon"), forFile: url.path(percentEncoded: false))
+        }
 
         guard let domain = defaults.persistentDomain(forName: "com.apple.dock"),
               let folders = domain["persistent-others"] as? [[String: Any]] else { return }
@@ -204,3 +190,30 @@ struct ContentView: View {
 //    ContentView()
 //        .fixedSize()
 // }
+
+extension View {
+    func dragWndWithClick() -> some View {
+        overlay(DragWndView())
+    }
+}
+
+struct DragWndView: View {
+    var body: some View {
+        Color.clear
+            .overlay(DragWndNSRepr())
+    }
+}
+
+private struct DragWndNSRepr: NSViewRepresentable {
+    func makeNSView(context: Context) -> NSView {
+        return DragWndNSView()
+    }
+
+    func updateNSView(_ nsView: NSView, context: Context) {}
+}
+
+private class DragWndNSView: NSView {
+    override public func mouseDown(with event: NSEvent) {
+        window?.performDrag(with: event)
+    }
+}

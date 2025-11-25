@@ -31,7 +31,7 @@ struct FilePathView: View {
         }
         .contentShape(Rectangle())
         .frame(maxWidth: .infinity)
-        .onDrop(of: [.fileURL], isTargeted: self.$targetsPath, perform: { itemProviders, _ in
+        .onDrop(of: [.fileURL], isTargeted: $targetsPath, perform: { itemProviders, _ in
             for item in itemProviders {
                 self.pasteProgress = item.loadObject(ofClass: URL.self) { url, error in
                     if let error {
@@ -59,8 +59,11 @@ struct FilePathView: View {
         })
         .onAppear {
             self.folderIcon = NSWorkspace.shared.icon(forFile: self.url.path(percentEncoded: false))
+            if #available(macOS 26.0, *) {
+                folderIcon = NSImage(named: "Tahoe_Desktop")!
+            }
         }
-        .onChange(of: self.url) { _ in
+        .onChange(of: url) { _ in
             self.folderIcon = NSWorkspace.shared.icon(forFile: self.url.path(percentEncoded: false))
         }
     }

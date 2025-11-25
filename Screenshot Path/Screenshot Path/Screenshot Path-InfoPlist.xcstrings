@@ -50,37 +50,37 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Copyright © 2014-2024 Daniel Witt. Alle Rechte vorbehalten."
+            "value" : "Copyright © 2014-2025 Daniel Witt. Alle Rechte vorbehalten."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Copyright © 2014-2024 Daniel Witt. All rights reserved."
+            "value" : "Copyright © 2014-2025 Daniel Witt. All rights reserved."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Derechos de autor © 2014-2024 Daniel Witt. Todos los derechos reservados."
+            "value" : "Derechos de autor © 2014-2025 Daniel Witt. Todos los derechos reservados."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Droits d’auteur © 2014-2024 Daniel Witt. Tous droits réservés."
+            "value" : "Droits d’auteur © 2014-2025 Daniel Witt. Tous droits réservés."
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Diritto d'autore © 2014-2024 Daniel Witt. Tutti i diritti riservati."
+            "value" : "Diritto d'autore © 2014-2025 Daniel Witt. Tutti i diritti riservati."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "著作権 © 2014-2024 ダニエル・ウィット。無断転載を禁じます。"
+            "value" : "著作権 © 2014-2025 ダニエル・ウィット。無断転載を禁じます。"
           }
         }
       }

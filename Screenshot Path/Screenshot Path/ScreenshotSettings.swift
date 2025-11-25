@@ -8,7 +8,7 @@
 import Foundation
 import UniformTypeIdentifiers.UTType
 
-extension UTType: Identifiable {
+extension UTType: @retroactive Identifiable {
     public var id: String {
         return identifier
     }
